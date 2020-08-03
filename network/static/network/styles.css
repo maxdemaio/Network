@@ -1,0 +1,10 @@
+.body {
+    margin: 10px;
+}
+
+/* All Posts */
+#new-post-section {
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid grey;
+}
