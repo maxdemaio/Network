@@ -10,12 +10,22 @@ from .models import User
 class PostForm(forms.Form):
     content = forms.CharField(label="Your post", max_length=300, widget=forms.Textarea)
 
+
 def index(request):
-    # Create new post form instance
-    newPostForm = PostForm()
-    return render(request, "network/index.html", {
-        "newPostForm": newPostForm,
-    })
+    if request.method == "POST":
+        # TODO make it so it returns a problem with the form (maybe a system message)
+        # Check if the user is logged in
+        if request.user.is_authenticated:
+            return HttpResponse("You just posted, homie")
+        else:
+            return HttpResponse("Yo homie, you need to register")
+    else:
+        # Create new post form instance
+        newPostForm = PostForm()
+
+        return render(request, "network/index.html", {
+            "newPostForm": newPostForm,
+        })
 
 
 def login_view(request):
