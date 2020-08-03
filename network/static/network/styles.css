@@ -7,4 +7,11 @@
     border-radius: 5px;
     padding: 20px;
     border: 1px solid grey;
+    margin-bottom: 10px;
+}
+
+/* Probably can reuse for following section */
+.posts-section div {
+    border: 1px solid grey;
+    padding: 20px;
 }

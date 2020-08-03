@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,9 +7,15 @@ from django.urls import reverse
 
 from .models import User
 
+class PostForm(forms.Form):
+    content = forms.CharField(label="Your post", max_length=300, widget=forms.Textarea)
 
 def index(request):
-    return render(request, "network/index.html")
+    # Create new post form instance
+    newPostForm = PostForm()
+    return render(request, "network/index.html", {
+        "newPostForm": newPostForm,
+    })
 
 
 def login_view(request):

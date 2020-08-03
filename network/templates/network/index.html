@@ -5,7 +5,18 @@
 
 <div id="new-post-section">
     <h2>New Post</h2>
-    <textarea name="new-post" id="" cols="30" rows="10"></textarea>
+    <form action="" method="">
+        {% csrf_token %}
+        {{ newPostForm }}
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+    
+</div>
+
+<div class="posts-section">
+    <div>
+        Example Post
+    </div>
 </div>
 
 {% endblock %}
