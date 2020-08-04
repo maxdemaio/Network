@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, UserFollowing, Posts
 
 class PostForm(forms.Form):
     content = forms.CharField(label="Your post", max_length=300, widget=forms.Textarea)
@@ -17,7 +17,6 @@ def index(request):
 
         # Check if form is valid
         if form.is_valid():
-            # Return them back
             # TODO this should actually be AJAX like, and not have a page reload
 
             # TODO make it so it returns a problem with the form (maybe a system message)
@@ -25,6 +24,9 @@ def index(request):
             if request.user.is_authenticated == False:
                 return HttpResponse("Yo homie, you need to register")
             else:
+                # print out form attributes
+                content = form.cleaned_data["content"]
+                print(content)
                 return HttpResponseRedirect(reverse("index"))
     else:
         # Create new post form instance
