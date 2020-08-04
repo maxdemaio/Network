@@ -24,9 +24,14 @@ def index(request):
             if request.user.is_authenticated == False:
                 return HttpResponse("Yo homie, you need to register")
             else:
-                # print out form attributes
+                # Save new post in the db
+                currentUser = request.user
                 content = form.cleaned_data["content"]
+                newPost = Posts(user_id=currentUser.id,content=content)
+                newPost.save()
+
                 print(content)
+                print(currentUser.id)
                 return HttpResponseRedirect(reverse("index"))
     else:
         # Create new post form instance

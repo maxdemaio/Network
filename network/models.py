@@ -15,4 +15,4 @@ class Posts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     time_posted = models.DateField(auto_now_add=True)
     content = models.CharField(max_length=300)
-    like_count = models.IntegerField()
+    like_count = models.IntegerField(default=0)
