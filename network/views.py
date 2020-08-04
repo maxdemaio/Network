@@ -13,18 +13,26 @@ class PostForm(forms.Form):
 
 def index(request):
     if request.method == "POST":
-        # TODO make it so it returns a problem with the form (maybe a system message)
-        # Check if the user is logged in
-        if request.user.is_authenticated:
-            return HttpResponse("You just posted, homie")
-        else:
-            return HttpResponse("Yo homie, you need to register")
+        form = PostForm(request.POST)
+
+        # Check if form is valid
+        if form.is_valid():
+            # Return them back
+            # TODO this should actually be AJAX like, and not have a page reload
+
+            # TODO make it so it returns a problem with the form (maybe a system message)
+            # Check if the user is logged in
+            if request.user.is_authenticated == False:
+                return HttpResponse("Yo homie, you need to register")
+            else:
+                return HttpResponseRedirect(reverse("index"))
     else:
         # Create new post form instance
         newPostForm = PostForm()
-
+        examplePosts = ["example1", "example2", "example3"]
         return render(request, "network/index.html", {
             "newPostForm": newPostForm,
+            "examplePosts": examplePosts,
         })
 
 

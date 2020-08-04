@@ -14,9 +14,24 @@
 </div>
 
 <div class="posts-section">
-    <div>
-        Example Post
+    {% for example in examplePosts %}
+    <div class="post">
+        <p><strong>Example Name</strong></p>
+        <div>
+            <a href="#">Edit</a>
+        </div>
+
+        {{ example }}
+
+        <div class="text-muted">
+            Example Timestamp
+        </div>
+
+        <div>
+            ❤️ <span class="text-muted">0</span>
+        </div>
     </div>
+    {% endfor %}
 </div>
 
 {% endblock %}
