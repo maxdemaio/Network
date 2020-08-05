@@ -16,19 +16,19 @@
 <div class="posts-section">
     {% for example in examplePosts %}
     <div class="post">
-        <p><strong>Example Name</strong></p>
+        <p><strong>{{ example.user }}</strong></p>
         <div>
             <a href="#">Edit</a>
         </div>
 
-        {{ example }}
+        {{ example.content }}
 
         <div class="text-muted">
-            Example Timestamp
+            {{ example.time_posted }}
         </div>
 
         <div>
-            ❤️ <span class="text-muted">0</span>
+            ❤️ <span class="text-muted">{{ example.like_count }}</span>
         </div>
     </div>
     {% endfor %}

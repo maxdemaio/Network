@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -27,6 +29,9 @@ def index(request):
                 # Save new post in the db
                 currentUser = request.user
                 content = form.cleaned_data["content"]
+
+                # datetime object containing current date and time
+                now = datetime.now()
                 newPost = Posts(user_id=currentUser.id,content=content)
                 newPost.save()
 
@@ -36,7 +41,7 @@ def index(request):
     else:
         # Create new post form instance
         newPostForm = PostForm()
-        examplePosts = ["example1", "example2", "example3"]
+        examplePosts = Posts.objects.all()
         return render(request, "network/index.html", {
             "newPostForm": newPostForm,
             "examplePosts": examplePosts,
