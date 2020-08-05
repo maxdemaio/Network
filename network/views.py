@@ -102,4 +102,6 @@ def register(request):
 
 
 def profile(request, user):
-    return HttpResponse(f"Profile for {user}")
+    return render(request, "network/profile.html", {
+        "user": user
+    })
