@@ -20,9 +20,7 @@ def index(request):
 
         # Check if form is valid
         if form.is_valid():
-            # TODO this should actually be AJAX like, and not have a page reload
 
-            # TODO make it so it returns a problem with the form (maybe a system message)
             # Check if the user is logged in
             if request.user.is_authenticated == False:
                 messages.error(request, "Please register or log in to create a post")
@@ -42,8 +40,9 @@ def index(request):
                 return HttpResponseRedirect(reverse("index"))
     else:
         # Create new post form instance
+        # TODO sort the posts from most recent to oldest
         newPostForm = PostForm()
-        examplePosts = Posts.objects.all()
+        examplePosts = Posts.objects.order_by('time_posted')
         return render(request, "network/index.html", {
             "newPostForm": newPostForm,
             "examplePosts": examplePosts,
@@ -100,3 +99,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def profile(request, user):
+    return HttpResponse(f"Profile for {user}")

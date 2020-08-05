@@ -23,7 +23,7 @@
 <div class="posts-section">
     {% for example in examplePosts %}
     <div class="post">
-        <p><strong>{{ example.user }}</strong></p>
+        <p><a href="{% url 'profile' example.user %}"><strong>{{ example.user }}</strong></a></p>
         <div>
             <a href="#">Edit</a>
         </div>
