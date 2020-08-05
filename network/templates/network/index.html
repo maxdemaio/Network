@@ -4,6 +4,13 @@
 <h1>All Posts</h1>
 
 <div id="new-post-section">
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     <h2>New Post</h2>
     <form action="/" method="post">
         {% csrf_token %}

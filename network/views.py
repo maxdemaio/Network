@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import forms
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -24,7 +25,8 @@ def index(request):
             # TODO make it so it returns a problem with the form (maybe a system message)
             # Check if the user is logged in
             if request.user.is_authenticated == False:
-                return HttpResponse("Yo homie, you need to register")
+                messages.error(request, "Please register or log in to create a post")
+                return HttpResponseRedirect(reverse("index"))
             else:
                 # Save new post in the db
                 currentUser = request.user
