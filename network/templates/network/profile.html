@@ -1,8 +1,38 @@
 {% extends "network/layout.html" %}
 
-{% block body %}
-<h1>Profile</h1>
+{% block head %}
+<script src="/static/network/profile.js"></script>
+{% endblock %}
 
-<p>This is the profile for {{ user }} </p>
+{% block body %}
+<h1>{{ user }}</h1>
+<button id="follow-button" type="button" class="btn btn-info">Follow</button>
+
+<p>This is the profile for {{ user }}</p>
+
+<p>{{ user }} has <span>0</span> followers</p>
+<p>{{ user }} is following <span>0</span> people</p>
+
+<h2>{{ user }}'s posts</h2>
+<div class="posts-section">
+    {% for post in userPosts %}
+    <div class="post">
+        <p><a href="{% url 'profile' post.user %}"><strong>{{ post.user }}</strong></a></p>
+        <div>
+            <a href="#">Edit</a>
+        </div>
+
+        {{ post.content }}
+
+        <div class="text-muted">
+            {{ post.time_posted }}
+        </div>
+
+        <div>
+            ❤️ <span class="text-muted">{{ post.like_count }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

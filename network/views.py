@@ -102,6 +102,17 @@ def register(request):
 
 
 def profile(request, user):
+    """ Profile page for a user """
+    # Get posts for current user
+    currentUserID = User.objects.get(username=user).id
+    userPosts = Posts.objects.filter(user_id=currentUserID)
+
+    # TODO
+    # Get following/follower count for current user
+    following = UserFollowing.objects.filter(user_id=currentUserID)
+    print(following)
+
     return render(request, "network/profile.html", {
-        "user": user
+        "user": user,
+        "userPosts": userPosts,
     })
