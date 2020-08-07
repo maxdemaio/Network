@@ -40,12 +40,21 @@ def index(request):
                 return HttpResponseRedirect(reverse("index"))
     else:
         # Create new post form instance
-        # TODO sort the posts from most recent to oldest
         newPostForm = PostForm()
-        examplePosts = Posts.objects.order_by('time_posted')
+        # Sort the posts from most recent to oldest
+        allPosts = Posts.objects.order_by('time_posted')
+
+        # TODO
+        # Add edit button to current logged in user's posts
+        if request.user.is_authenticated == False:
+            editButton = False
+        else:
+            editButton = True
+
         return render(request, "network/index.html", {
             "newPostForm": newPostForm,
-            "examplePosts": examplePosts,
+            "allPosts": allPosts,
+            "editButton": editButton,
         })
 
 

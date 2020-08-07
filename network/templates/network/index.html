@@ -21,21 +21,23 @@
 </div>
 
 <div class="posts-section">
-    {% for example in examplePosts %}
+    {% for post in allPosts %}
     <div class="post">
-        <p><a href="{% url 'profile' example.user %}"><strong>{{ example.user }}</strong></a></p>
+        <p><a href="{% url 'profile' post.user %}"><strong>{{ post.user }}</strong></a></p>
+        {% if editButton %}
         <div>
             <a href="#">Edit</a>
         </div>
+        {% endif %}
 
-        {{ example.content }}
+        {{ post.content }}
 
         <div class="text-muted">
-            {{ example.time_posted }}
+            {{ post.time_posted }}
         </div>
 
         <div>
-            ❤️ <span class="text-muted">{{ example.like_count }}</span>
+            ❤️ <span class="text-muted">{{ post.like_count }}</span>
         </div>
     </div>
     {% endfor %}
