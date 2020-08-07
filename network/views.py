@@ -112,7 +112,16 @@ def profile(request, user):
     following = UserFollowing.objects.filter(user_id=currentUserID)
     print(following)
 
+    # Check if user logged in is the same user as the profile
+    # If they are the same, do not display a follow button
+    loggedUser = request.user
+    if User.objects.get(username=loggedUser).id == currentUserID:
+        followButton = False
+    else:
+        followButton = True
+
     return render(request, "network/profile.html", {
         "user": user,
         "userPosts": userPosts,
+        "followButton": followButton,
     })

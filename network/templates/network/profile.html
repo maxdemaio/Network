@@ -5,8 +5,11 @@
 {% endblock %}
 
 {% block body %}
-<h1>{{ user }}</h1>
+<h1 id="profileUser">{{ user }}</h1>
+
+{% if followButton %}
 <button id="follow-button" type="button" class="btn btn-info">Follow</button>
+{% endif %}
 
 <p>This is the profile for {{ user }}</p>
 
