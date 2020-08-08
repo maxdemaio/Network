@@ -44,17 +44,17 @@ def index(request):
         # Sort the posts from most recent to oldest
         allPosts = Posts.objects.order_by('time_posted')
 
-        # TODO
-        # Add edit button to current logged in user's posts
-        if request.user.is_authenticated == False:
-            editButton = False
+        # Toggle edit buttons based on if user ids match the post's poster
+        if request.user.is_authenticated == True:
+            currentUserID = User.objects.get(username=request.user).id
+            print(currentUserID)
         else:
-            editButton = True
+            currentUserID = None
 
         return render(request, "network/index.html", {
             "newPostForm": newPostForm,
             "allPosts": allPosts,
-            "editButton": editButton,
+            "currentUserID": currentUserID,
         })
 
 

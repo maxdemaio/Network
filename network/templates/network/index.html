@@ -1,5 +1,9 @@
 {% extends "network/layout.html" %}
 
+{% block head %}
+<script src="/static/network/index.js"></script>
+{% endblock %}
+
 {% block body %}
 <h1>All Posts</h1>
 
@@ -24,13 +28,15 @@
     {% for post in allPosts %}
     <div class="post">
         <p><a href="{% url 'profile' post.user %}"><strong>{{ post.user }}</strong></a></p>
-        {% if editButton %}
+        {% if currentUserID == post.user_id %}
         <div>
-            <a href="#">Edit</a>
+            <a href="javascript:editPost()">Edit</a>
         </div>
         {% endif %}
 
-        {{ post.content }}
+        <div id="post-content">
+            {{ post.content }}
+        </div>
 
         <div class="text-muted">
             {{ post.time_posted }}
