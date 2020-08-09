@@ -134,3 +134,8 @@ def profile(request, user):
         "userPosts": userPosts,
         "followButton": followButton,
     })
+
+
+def editPost(request):
+    if request.method == "POST":
+        return HttpResponse(json.dumps({'foo': 'bar'}), content_type='application/json')

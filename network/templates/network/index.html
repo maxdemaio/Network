@@ -1,8 +1,38 @@
 {% extends "network/layout.html" %}
 
 {% block head %}
-<script src="/static/network/index.js"></script>
+<script>
+    // Change it to where the edit post brings up a text area element and a submit button
+    // The text area should be pre-populated with the post's content
+
+    // Upon submission, the following function will post to the Django backend
+    // The JS will fetch the response and update the post's contents.
+
+    function editPost() {
+        console.log(this.innerHTML);
+        // When user submits the new content of their post, post it to Django route
+        fetch("{% url 'editPost' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                // newContent would be here
+                name: 'Example',
+                csrfmiddlewaretoken: "XX"
+            })
+        }).then(res => {
+            if (res.ok) {
+                console.log("Success");
+            } else {
+                console.log("Not successful");
+            }
+            return res.json();
+        }).then(data => console.log(data));
+    };
+</script>
 {% endblock %}
+
 
 {% block body %}
 <h1>All Posts</h1>
@@ -27,14 +57,14 @@
 <div class="posts-section">
     {% for post in allPosts %}
     <div class="post">
-        <p><a href="{% url 'profile' post.user %}"><strong>{{ post.user }}</strong></a></p>
+        <p><a href="{% url 'profile' post.user %}" data-url="{% url 'editPost' %}"><strong>{{ post.user }}</strong></a></p>
         {% if currentUserID == post.user_id %}
         <div>
             <a href="javascript:editPost()">Edit</a>
         </div>
         {% endif %}
 
-        <div id="post-content">
+        <div class="post-content">
             {{ post.content }}
         </div>
 
