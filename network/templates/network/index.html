@@ -20,13 +20,6 @@
             return cookieValue;
         };
 
-    
-
-    // Obtain post's ID, and display a text area pre-populated with contents to edit
-    function example(clicked_id) {
-        parentElementID = "post-" + clicked_id;
-        console.log(parentElementID);
-    };
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
@@ -44,6 +37,18 @@
                 console.log("Success");
             }
         });
+    };
+
+    // Obtain post's ID, and display a text area pre-populated with contents to edit
+    function example(clicked_id) {
+        contentElementID = "content-" + clicked_id;
+        contentElement = document.querySelector("#" + contentElementID);
+        content = contentElement.innerHTML;
+
+        // Create text area and populate contents
+        var textArea = document.createElement("textarea");
+        contentElement.appendChild(textArea); 
+        console.log(content);
     };
     
 </script>
@@ -80,7 +85,7 @@
         </div>
         {% endif %}
 
-        <div class="post-content">
+        <div id="content-{{forloop.counter}}" class="post-content">
             {{ post.content }}
         </div>
 
