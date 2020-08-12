@@ -18,10 +18,15 @@
                 }
             }
             return cookieValue;
-        }
+        };
 
-    // Change it to where the edit post brings up a text area element and a submit button
-    // The text area should be pre-populated with the post's content
+    
+
+    // Obtain post's ID, and display a text area pre-populated with contents to edit
+    function example(clicked_id) {
+        parentElementID = "post-" + clicked_id;
+        console.log(parentElementID);
+    };
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
@@ -40,12 +45,6 @@
             }
         });
     };
-
-    function example() {
-        var child = this.innerHTML;
-        console.log(child);
-        console.log("Get the post which the user clicked edit on");
-    }
     
 </script>
 {% endblock %}
@@ -73,11 +72,11 @@
 
 <div class="posts-section">
     {% for post in allPosts %}
-    <div class="post">
+    <div id="post-{{forloop.counter}}" class="post">
         <p><a href="{% url 'profile' post.user %}" data-url="{% url 'editPost' %}"><strong>{{ post.user }}</strong></a></p>
         {% if currentUserID == post.user_id %}
         <div>
-            <a href="javascript:example()">Edit</a>
+            <a id="{{forloop.counter}}" class="my-link" onClick="javascript:example(this.id)">Edit</a>
         </div>
         {% endif %}
 

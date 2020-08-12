@@ -23,3 +23,7 @@
 .post {
     margin-top: 10px;
 }
+
+.my-link {
+    color: lightblue !important;
+}
