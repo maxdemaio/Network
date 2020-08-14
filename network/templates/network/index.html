@@ -23,7 +23,7 @@
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
-    function editPost() {
+    function ajaxEdit() {
         const csrftoken = getCookie('csrftoken');
 
         $('.ajaxProgress').show();
@@ -40,14 +40,29 @@
     };
 
     // Obtain post's ID, and display a text area pre-populated with contents to edit
-    function example(clicked_id) {
+    function editPost(clicked_id) {
         contentElementID = "content-" + clicked_id;
         contentElement = document.querySelector("#" + contentElementID);
         content = contentElement.innerHTML;
 
-        // Create text area and populate contents
+        
+        // TODO: if form already exists in element, don't create another one
+        // Create form element and set form submission to AJAX function
+        var form = document.createElement("form");
+        form.onsubmit = ajaxEdit();
+
+        // Create text area / button and populate contents
         var textArea = document.createElement("textarea");
-        contentElement.appendChild(textArea); 
+        
+        textArea.id = "edit-" + clicked_id;
+        textArea.value = content;
+
+        // Append text area to form
+        form.appendChild(textArea);
+        // TODO Append submit button to form
+
+        // Delete post contents from post, and replace with form
+        contentElement.appendChild(form); 
         console.log(content);
     };
     
@@ -81,7 +96,7 @@
         <p><a href="{% url 'profile' post.user %}" data-url="{% url 'editPost' %}"><strong>{{ post.user }}</strong></a></p>
         {% if currentUserID == post.user_id %}
         <div>
-            <a id="{{forloop.counter}}" class="my-link" onClick="javascript:example(this.id)">Edit</a>
+            <a id="{{forloop.counter}}" class="my-link" onClick="javascript:editPost(this.id)">Edit</a>
         </div>
         {% endif %}
 
