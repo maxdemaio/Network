@@ -24,10 +24,14 @@
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
     function ajaxEdit(post_id) {
-        console.log(post_id);
+        // Obtain post contents
+        post_id = post_id.split("-")[1];
+        newContents = document.querySelector("#" + "edit-" + post_id).value;
+        console.log(newContents);
+
         const csrftoken = getCookie('csrftoken');
 
-        $('.ajaxProgress').show();
+        // Send new contents to be 
         $.ajax({
             type: "POST",
             url: "{% url 'editPost' %}",
@@ -77,7 +81,6 @@
         // Append text area and button to post
         contentElement.appendChild(textArea); 
         contentElement.appendChild(buttonDiv);
-        console.log(content);
     };
     
 </script>
