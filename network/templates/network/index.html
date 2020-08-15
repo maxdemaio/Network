@@ -23,7 +23,8 @@
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
-    function ajaxEdit() {
+    function ajaxEdit(post_id) {
+        console.log(post_id);
         const csrftoken = getCookie('csrftoken');
 
         $('.ajaxProgress').show();
@@ -46,23 +47,36 @@
         content = contentElement.innerHTML;
 
         
-        // TODO: if form already exists in element, don't create another one
-        // Create form element and set form submission to AJAX function
-        var form = document.createElement("form");
-        form.onsubmit = ajaxEdit();
+        // TODO: if textarea/button already exists in element, don't create another one
 
-        // Create text area / button and populate contents
+        // Create text are element and set button click to AJAX function
+        contentElement.innerHTML = "";
+
+        // Delete post contents from post, and replace with form
+        
+        // Create text area and populate contents
         var textArea = document.createElement("textarea");
         
         textArea.id = "edit-" + clicked_id;
         textArea.value = content;
 
-        // Append text area to form
-        form.appendChild(textArea);
-        // TODO Append submit button to form
+        // Create button and apply onclick to AJAX function 
+        buttonDiv = document.createElement("div");
+        button = document.createElement("button");
+        button.className = "btn btn-primary";
+        button.type ="submit";
+        button.innerHTML = "Submit";
+        button.id = "button-" + clicked_id;
+        button.onclick = function clicked() {
+            ajaxEdit(this.id);
+            // TODO
+            // Delete text area and button from post
+            };
+        buttonDiv.appendChild(button);
 
-        // Delete post contents from post, and replace with form
-        contentElement.appendChild(form); 
+        // Append text area and button to post
+        contentElement.appendChild(textArea); 
+        contentElement.appendChild(buttonDiv);
         console.log(content);
     };
     
