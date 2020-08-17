@@ -31,14 +31,15 @@
 
         const csrftoken = getCookie('csrftoken');
 
-        // Send new contents to be 
+        // Send new contents to be updated on back-end
         $.ajax({
             type: "POST",
             url: "{% url 'editPost' %}",
             dataType: "json",
             async: true,
-            data: { csrfmiddlewaretoken: csrftoken },
+            data: { csrfmiddlewaretoken: csrftoken, postID: post_id, content: newContents },
             success: function (json) {
+                // TODO update post contents w/ updated contents (don't have to deal w/ backend)
                 console.log("Success");
             }
         });
@@ -52,6 +53,7 @@
 
         
         // TODO: if textarea/button already exists in element, don't create another one
+        // basically just do "return" so nothing happens and the func ends
 
         // Create text are element and set button click to AJAX function
         contentElement.innerHTML = "";
@@ -79,7 +81,7 @@
         buttonDiv.appendChild(button);
 
         // Append text area and button to post
-        contentElement.appendChild(textArea); 
+        contentElement.appendChild(textArea);
         contentElement.appendChild(buttonDiv);
     };
     
@@ -109,15 +111,15 @@
 
 <div class="posts-section">
     {% for post in allPosts %}
-    <div id="post-{{forloop.counter}}" class="post">
+    <div id="post-{{ post.id }}" class="post">
         <p><a href="{% url 'profile' post.user %}" data-url="{% url 'editPost' %}"><strong>{{ post.user }}</strong></a></p>
         {% if currentUserID == post.user_id %}
         <div>
-            <a id="{{forloop.counter}}" class="my-link" onClick="javascript:editPost(this.id)">Edit</a>
+            <a id="{{ post.id }}" class="my-link" onClick="javascript:editPost(this.id)">Edit</a>
         </div>
         {% endif %}
 
-        <div id="content-{{forloop.counter}}" class="post-content">
+        <div id="content-{{ post.id }}" class="post-content">
             {{ post.content }}
         </div>
 

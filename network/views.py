@@ -138,5 +138,17 @@ def profile(request, user):
 
 
 def editPost(request):
+    """ Update the contents of a post based on AJAX id and contents """
     if request.method == "POST":
+        post_id = int(request.POST.get('postID', ''))
+        newContents = request.POST.get("content", "")
+        print(post_id)
+        print(newContents)
+        
+        # Update post w/ given post ID with new contents
+        p = Posts.objects.get(id=post_id)
+        p.content = newContents  # change field
+        p.save()  # this will update only
+
+        # Pass back success
         return HttpResponse(json.dumps({'foo': 'bar'}), content_type='application/json')
