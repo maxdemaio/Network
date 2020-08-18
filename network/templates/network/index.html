@@ -27,7 +27,8 @@
         // Obtain post contents
         post_id = post_id.split("-")[1];
         newContents = document.querySelector("#" + "edit-" + post_id).value;
-        console.log(newContents);
+        contentElementID = "content-" + post_id;
+        contentElement = document.querySelector("#" + contentElementID);
 
         const csrftoken = getCookie('csrftoken');
 
@@ -39,7 +40,8 @@
             async: true,
             data: { csrfmiddlewaretoken: csrftoken, postID: post_id, content: newContents },
             success: function (json) {
-                // TODO update post contents w/ updated contents (don't have to deal w/ backend)
+                // Update post contents w/ updated contents (don't have to deal w/ backend)
+                contentElement.innerHTML = newContents;
                 console.log("Success");
             }
         });
@@ -52,13 +54,17 @@
         content = contentElement.innerHTML;
 
         
-        // TODO: if textarea/button already exists in element, don't create another one
-        // basically just do "return" so nothing happens and the func ends
-
+        // Check if textarea already exists in element, don't create another one
+        contentChildList = contentElement.children;
+        for (let item of contentChildList) {
+            console.log(item.tagName);
+            if (item.tagName === "TEXTAREA") {
+                return;
+            }
+        }
+        
         // Create text are element and set button click to AJAX function
         contentElement.innerHTML = "";
-
-        // Delete post contents from post, and replace with form
         
         // Create text area and populate contents
         var textArea = document.createElement("textarea");
@@ -75,8 +81,6 @@
         button.id = "button-" + clicked_id;
         button.onclick = function clicked() {
             ajaxEdit(this.id);
-            // TODO
-            // Delete text area and button from post
             };
         buttonDiv.appendChild(button);
 
