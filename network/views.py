@@ -137,6 +137,7 @@ def profile(request, user):
     })
 
 
+# AJAX routes
 def editPost(request):
     """ Update the contents of a post based on AJAX id and contents """
     if request.method == "POST":
@@ -150,6 +151,25 @@ def editPost(request):
         p.content = newContents  # change field
         p.save()  # this will update only
 
-        # TODO
         # Pass back success
-        return HttpResponse(json.dumps({'foo': 'bar'}), content_type='application/json')
+        return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
+
+
+def toggleFollow(request):
+    """ Update the follower / followee table """
+    if request.method == "POST":
+        # Check and make sure user is valid again
+        if request.user.is_authenticated == True:
+            currentUserID = User.objects.get(username=request.user).id
+            print(currentUserID)
+        else:
+            return HttpResponse("You must be signed in to follow another user")
+        
+        follower = "examplePerson"
+        followee = "examplePerson2"
+
+        # TODO Obtain following_user ID
+        # UserFollowing.objects.create(user_id=currentUserID,
+        #                              following_user_id=follow.id)
+        # Pass back success
+        return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
