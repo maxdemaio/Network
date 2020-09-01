@@ -4,6 +4,7 @@ import json
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -45,10 +46,15 @@ def index(request):
         # Sort the posts from most recent to oldest
         allPosts = Posts.objects.order_by('time_posted')
 
+        # TODO Pagination of posts
+        paginator = Paginator(allPosts, 2)
+        print(paginator.num_pages)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         # Toggle edit buttons based on if user ids match the post's poster
         if request.user.is_authenticated == True:
             currentUserID = User.objects.get(username=request.user).id
-            print(currentUserID)
         else:
             currentUserID = None
 
@@ -56,6 +62,7 @@ def index(request):
             "newPostForm": newPostForm,
             "allPosts": allPosts,
             "currentUserID": currentUserID,
+            "page_obj": page_obj
         })
 
 
@@ -114,26 +121,32 @@ def register(request):
 def profile(request, user):
     """ Profile page for a user """
     # Get posts for current user
-    currentUserID = User.objects.get(username=user).id
-    userPosts = Posts.objects.filter(user_id=currentUserID)
+    profileUserID = User.objects.get(username=user).id
+    userPosts = Posts.objects.filter(user_id=profileUserID)
 
     # TODO
     # Get following/follower count for current user
-    following = UserFollowing.objects.filter(user_id=currentUserID)
+    following = UserFollowing.objects.filter(user_id=profileUserID)
     print(following)
 
-    # Check if user logged in is the same user as the profile
-    # If they are the same, do not display a follow button
-    loggedUser = request.user
-    if User.objects.get(username=loggedUser).id == currentUserID:
-        followButton = False
+    # Toggle edit buttons based on if user ids match the post's poster
+    if request.user.is_authenticated == True:
+        # Check if user logged in is the same user as the profile
+        # If they are the same, do not display a follow button
+        currentUserID = User.objects.get(username=request.user).id
+        if User.objects.get(username=request.user).id == profileUserID:
+            followButton = False
+        else:
+            followButton = True
     else:
-        followButton = True
+        currentUserID = None
+        followButton = False
 
     return render(request, "network/profile.html", {
         "user": user,
         "userPosts": userPosts,
         "followButton": followButton,
+        "currentUserID": currentUserID
     })
 
 

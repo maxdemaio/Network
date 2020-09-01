@@ -27,3 +27,7 @@
 .my-link {
     color: lightblue !important;
 }
+
+#my-pagenav {
+    margin-top: 10px;
+}

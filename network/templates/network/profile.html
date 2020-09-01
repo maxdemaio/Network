@@ -2,6 +2,95 @@
 
 {% block head %}
 <script src="/static/network/profile.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    // Obtain CSRF Token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+
+
+    // Upon submission, the following function will post to the Django backend
+    // The JS will fetch the response and update the post's contents.
+    function ajaxEdit(post_id) {
+        // Obtain post contents
+        post_id = post_id.split("-")[1];
+        newContents = document.querySelector("#" + "edit-" + post_id).value;
+        contentElementID = "content-" + post_id;
+        contentElement = document.querySelector("#" + contentElementID);
+
+        const csrftoken = getCookie('csrftoken');
+
+        // Send new contents to be updated on back-end
+        $.ajax({
+            type: "POST",
+            url: "{% url 'editPost' %}",
+            dataType: "json",
+            async: true,
+            data: { csrfmiddlewaretoken: csrftoken, postID: post_id, content: newContents },
+            success: function (json) {
+                // Update post contents w/ updated contents (don't have to deal w/ backend)
+                contentElement.innerHTML = newContents;
+                console.log("Success");
+            }
+        });
+    };
+
+    // Obtain post's ID, and display a text area pre-populated with contents to edit
+    function editPost(clicked_id) {
+        contentElementID = "content-" + clicked_id;
+        contentElement = document.querySelector("#" + contentElementID);
+        content = contentElement.innerHTML;
+
+
+        // Check if textarea already exists in element, don't create another one
+        contentChildList = contentElement.children;
+        for (let item of contentChildList) {
+            console.log(item.tagName);
+            if (item.tagName === "TEXTAREA") {
+                return;
+            }
+        }
+
+        // Create text are element and set button click to AJAX function
+        contentElement.innerHTML = "";
+
+        // Create text area and populate contents
+        var textArea = document.createElement("textarea");
+
+        textArea.id = "edit-" + clicked_id;
+        textArea.value = content;
+
+        // Create button and apply onclick to AJAX function 
+        buttonDiv = document.createElement("div");
+        button = document.createElement("button");
+        button.className = "btn btn-primary";
+        button.type = "submit";
+        button.innerHTML = "Save";
+        button.id = "button-" + clicked_id;
+        button.onclick = function clicked() {
+            ajaxEdit(this.id);
+        };
+        buttonDiv.appendChild(button);
+
+        // Append text area and button to post
+        contentElement.appendChild(textArea);
+        contentElement.appendChild(buttonDiv);
+    };
+
+</script>
 {% endblock %}
 
 {% block body %}
@@ -19,13 +108,17 @@
 <h2>{{ user }}'s posts</h2>
 <div class="posts-section">
     {% for post in userPosts %}
-    <div class="post">
-        <p><a href="{% url 'profile' post.user %}"><strong>{{ post.user }}</strong></a></p>
+    <div id="post-{{ post.id }}" class="post">
+        <p><a href="{% url 'profile' post.user %}" data-url="{% url 'editPost' %}"><strong>{{ post.user }}</strong></a></p>
+        {% if currentUserID == post.user_id %}
         <div>
-            <a href="#">Edit</a>
+            <a id="{{ post.id }}" class="my-link" onClick="javascript:editPost(this.id)">Edit</a>
         </div>
+        {% endif %}
 
-        {{ post.content }}
+        <div id="content-{{ post.id }}" class="post-content">
+            {{ post.content }}
+        </div>
 
         <div class="text-muted">
             {{ post.time_posted }}
