@@ -4,7 +4,7 @@ import json
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -43,14 +43,20 @@ def index(request):
     else:
         # Create new post form instance
         newPostForm = PostForm()
+
+        # Pagination of posts
         # Sort the posts from most recent to oldest
         allPosts = Posts.objects.order_by('time_posted')
+        paginator = Paginator(allPosts, 2) # Two per page
+        page_number = request.GET.get('page', 1)
 
-        # TODO Pagination of posts
-        paginator = Paginator(allPosts, 2)
+        print("Number of Pages")
         print(paginator.num_pages)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+
+        try:
+            page_obj = paginator.get_page(page_number)
+        except EmptyPage:
+            page_obj = paginator.get_page(1)
 
         # Toggle edit buttons based on if user ids match the post's poster
         if request.user.is_authenticated == True:
@@ -60,7 +66,6 @@ def index(request):
 
         return render(request, "network/index.html", {
             "newPostForm": newPostForm,
-            "allPosts": allPosts,
             "currentUserID": currentUserID,
             "page_obj": page_obj
         })
