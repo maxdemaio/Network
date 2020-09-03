@@ -4,6 +4,39 @@
 <script src="/static/network/profile.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
+    // Follower on/off
+    document.addEventListener("DOMContentLoaded", function () {
+            
+            follow_button = document.querySelector("#follow-button");
+            follow_button.onclick = () => {
+                // Obtain profile user ID
+                
+                followee = document.querySelector("#profileUser").innerHTML;
+                // Call ajaxFollow after click
+                ajaxFollow(followee);
+                if (follow_button.innerHTML === "Follow") {
+                    follow_button.innerHTML = "Following";
+                } else {
+                    follow_button.innerHTML = "Follow";
+                }
+            };
+        });
+    
+    function ajaxFollow(followee) {
+        const csrftoken = getCookie('csrftoken');
+        // Send follow ajax to back-end
+        $.ajax({
+            type: "POST",
+            url: "{% url 'follow' %}",
+            dataType: "json",
+            async: true,
+            data: { csrfmiddlewaretoken: csrftoken, followee: followee},
+            success: function (json) {
+                console.log("Success");
+                }
+            });
+        };
+
     // Obtain CSRF Token
     function getCookie(name) {
         let cookieValue = null;
@@ -20,7 +53,6 @@
         }
         return cookieValue;
     };
-
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.

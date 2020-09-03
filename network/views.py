@@ -176,18 +176,23 @@ def editPost(request):
 def toggleFollow(request):
     """ Update the follower / followee table """
     if request.method == "POST":
+        followee = request.POST.get('followee', '')
+        followee_id = User.objects.get(username=followee).id
+
         # Check and make sure user is valid again
         if request.user.is_authenticated == True:
-            currentUserID = User.objects.get(username=request.user).id
-            print(currentUserID)
+            follower = User.objects.get(username=request.user)
+            follower_id = follower.id
+            print(follower_id)
+
+            # TODO toggle off if unfollow
+            # Set user to follow other user
+            # UserFollowing.objects.create(user_id=follower_id,
+            #                              following_user_id=followee_id)
+
+            # Pass back success
+            return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
         else:
             return HttpResponse("You must be signed in to follow another user")
-        
-        follower = "examplePerson"
-        followee = "examplePerson2"
 
-        # TODO Obtain following_user ID
-        # UserFollowing.objects.create(user_id=currentUserID,
-        #                              following_user_id=follow.id)
-        # Pass back success
-        return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
+        
