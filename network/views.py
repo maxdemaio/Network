@@ -143,6 +143,16 @@ def profile(request, user):
             followButton = False
         else:
             followButton = True
+            # Check if user is following the user's page they are visiting
+            print("current user ID: ", currentUserID)
+            print("profile user ID: ", profileUserID)
+            
+            try:
+                followCheck = UserFollowing.objects.get(    user_id=currentUserID, following_user_id=profileUserID)
+                if followCheck:
+                    following = True
+            except UserFollowing.DoesNotExist:
+                following = False
     else:
         currentUserID = None
         followButton = False
@@ -151,7 +161,8 @@ def profile(request, user):
         "user": user,
         "userPosts": userPosts,
         "followButton": followButton,
-        "currentUserID": currentUserID
+        "currentUserID": currentUserID,
+        "following": following
     })
 
 
@@ -187,9 +198,9 @@ def toggleFollow(request):
 
             # TODO toggle off if unfollow
             # Set user to follow other user
-            # UserFollowing.objects.create(user_id=follower_id,
-            #                              following_user_id=followee_id)
-
+            exampleSet = UserFollowing.objects.get(user_id=follower_id,
+                                         following_user_id=followee_id)
+            print(exampleSet)
             # Pass back success
             return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
         else:

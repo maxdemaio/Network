@@ -129,7 +129,13 @@
 <h1 id="profileUser">{{ user }}</h1>
 
 {% if followButton %}
-<button id="follow-button" type="button" class="btn btn-info">Follow</button>
+<button id="follow-button" type="button" class="btn btn-info">
+    {% if following %}
+        Following
+    {% else %}
+        Follow
+    {% endif %}
+</button>
 {% endif %}
 
 <p>This is the profile for {{ user }}</p>
