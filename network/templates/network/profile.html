@@ -18,12 +18,17 @@
                 } else {
                     follow_button.innerHTML = "Follow";
                 }
-                //
-                ajaxFollow(followee, );
+                // Pass if we are following or unfollowing a user
+                if (follow_button.innerHTML === "Following") {
+                    follow = true
+                } else {
+                    follow = false
+                }
+                ajaxFollow(followee, follow);
             };
         });
     
-    function ajaxFollow(followee) {
+    function ajaxFollow(followee, follow) {
         const csrftoken = getCookie('csrftoken');
         // Send follow ajax to back-end
         $.ajax({
@@ -31,7 +36,7 @@
             url: "{% url 'follow' %}",
             dataType: "json",
             async: true,
-            data: { csrfmiddlewaretoken: csrftoken, followee: followee},
+            data: { csrfmiddlewaretoken: csrftoken, followee: followee, follow: follow},
             success: function (json) {
                 console.log("Success");
                 }

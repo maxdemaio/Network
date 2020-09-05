@@ -188,19 +188,29 @@ def toggleFollow(request):
     """ Update the follower / followee table """
     if request.method == "POST":
         followee = request.POST.get('followee', '')
+        follow = request.POST.get("follow", False)
         followee_id = User.objects.get(username=followee).id
 
         # Check and make sure user is valid again
         if request.user.is_authenticated == True:
             follower = User.objects.get(username=request.user)
             follower_id = follower.id
+            print(follow)
             print(follower_id)
 
-            # TODO toggle off if unfollow
-            # Set user to follow other user
-            exampleSet = UserFollowing.objects.get(user_id=follower_id,
-                                         following_user_id=followee_id)
-            print(exampleSet)
+            # Toggle follow/unfollow
+            # If follow already true, change to unfollow and vise versa
+            if follow == "true":
+                # Unfollow
+                instance = UserFollowing.objects.get(
+                    user_id=follower_id, following_user_id=followee_id)
+                instance.delete()
+            else:
+                # Follow
+                UserFollowing.objects.create(
+                    user_id=follower_id, following_user_id=followee_id)
+                
+                
             # Pass back success
             return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
         else:
