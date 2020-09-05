@@ -13,12 +13,13 @@
                 
                 followee = document.querySelector("#profileUser").innerHTML;
                 // Call ajaxFollow after click
-                ajaxFollow(followee);
                 if (follow_button.innerHTML === "Follow") {
                     follow_button.innerHTML = "Following";
                 } else {
                     follow_button.innerHTML = "Follow";
                 }
+                //
+                ajaxFollow(followee, );
             };
         });
     
