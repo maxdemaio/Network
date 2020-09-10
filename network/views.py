@@ -50,9 +50,6 @@ def index(request):
         paginator = Paginator(allPosts, 2) # Two per page
         page_number = request.GET.get('page', 1)
 
-        print("Number of Pages")
-        print(paginator.num_pages)
-
         try:
             page_obj = paginator.get_page(page_number)
         except EmptyPage:
@@ -200,7 +197,7 @@ def toggleFollow(request):
 
             # Toggle follow/unfollow
             # If follow already true, change to unfollow and vise versa
-            if follow == "true":
+            if follow == "false":
                 # Unfollow
                 instance = UserFollowing.objects.get(
                     user_id=follower_id, following_user_id=followee_id)
