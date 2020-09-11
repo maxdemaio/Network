@@ -119,6 +119,31 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+def following(request):
+    # Pagination of posts
+    # Sort the posts from most recent to oldest
+    # TODO filter allposts
+    
+    allPosts = Posts.objects.order_by('time_posted')
+    paginator = Paginator(allPosts, 2)  # Two per page
+    page_number = request.GET.get('page', 1)
+
+    try:
+        page_obj = paginator.get_page(page_number)
+    except EmptyPage:
+        page_obj = paginator.get_page(1)
+
+    # Toggle edit buttons based on if user ids match the post's poster
+    if request.user.is_authenticated == True:
+        currentUserID = User.objects.get(username=request.user).id
+    else:
+        currentUserID = None
+
+    return render(request, "network/index.html", {
+        "currentUserID": currentUserID,
+        "page_obj": page_obj
+    })
+
 
 def profile(request, user):
     """ Profile page for a user """
