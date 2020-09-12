@@ -129,10 +129,13 @@ def following(request):
     # Pagination of posts
     # Sort the posts from most recent to oldest
     # TODO filter allposts
-    user = User.objects.get(id=currentUserID) # it is just example with id 1
-    print(user.following.all())
+    user = User.objects.get(id=currentUserID) 
+    # Error thrown because I'm usering user following and not user
+    followingSet = user.following.all()
+    print(followingSet[0])
 
-    allPosts = Posts.objects.order_by('time_posted')
+    # TODO, change followingSet to list
+    allPosts = Posts.objects.filter(user__in=[2]).order_by('time_posted')
     paginator = Paginator(allPosts, 2)  # Two per page
     page_number = request.GET.get('page', 1)
 
@@ -181,12 +184,18 @@ def profile(request, user):
         currentUserID = None
         followButton = False
 
+    user = User.objects.get(id=profileUserID) # it is just example with id 1
+    followingCount = len(user.following.all())
+    followerCount = len(user.followers.all())
+
     return render(request, "network/profile.html", {
         "user": user,
         "userPosts": userPosts,
         "followButton": followButton,
         "currentUserID": currentUserID,
-        "following": following
+        "following": following,
+        "followingCount": followingCount,
+        "followerCount": followerCount
     })
 
 
