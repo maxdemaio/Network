@@ -141,10 +141,15 @@
 </button>
 {% endif %}
 
-<p>This is the profile for {{ user }}</p>
+<div>
+    <div>
+        Following <span id="following-number"></span>
+    </div>
+    <div>
+        Followers <span id="followers-numver"></span>
+    </div>
+</div>
 
-<p>{{ user }} has <span>0</span> followers</p>
-<p>{{ user }} is following <span>0</span> people</p>
 
 <h2>{{ user }}'s posts</h2>
 <div class="posts-section">
