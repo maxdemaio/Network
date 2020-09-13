@@ -17,6 +17,7 @@ class PostForm(forms.Form):
 
 
 def index(request):
+    """ All Posts """
     if request.method == "POST":
         form = PostForm(request.POST)
 
@@ -28,12 +29,9 @@ def index(request):
                 messages.error(request, "Please register or log in to create a post")
                 return HttpResponseRedirect(reverse("index"))
             else:
-                # Save new post in the db
+                # Save new post in the db, model already saves datetime
                 currentUser = request.user
                 content = form.cleaned_data["content"]
-
-                # datetime object containing current date and time
-                now = datetime.now()
                 newPost = Posts(user_id=currentUser.id,content=content)
                 newPost.save()
 
@@ -45,9 +43,9 @@ def index(request):
         newPostForm = PostForm()
 
         # Pagination of posts
-        # Sort the posts from most recent to oldest
+        # Sort the posts from most recent to oldest, two per page
         allPosts = Posts.objects.order_by('time_posted')
-        paginator = Paginator(allPosts, 2) # Two per page
+        paginator = Paginator(allPosts, 2)
         page_number = request.GET.get('page', 1)
 
         try:
@@ -130,9 +128,10 @@ def following(request):
     # Sort the posts from most recent to oldest
     # TODO filter allposts
     user = User.objects.get(id=currentUserID) 
-    # Error thrown because I'm usering user following and not user
+
+    # Error thrown because I'm usering user following object and not user object
     followingSet = user.following.all()
-    print(followingSet[0])
+    print(followingSet[0])  # Userfollowing object
 
     # TODO, change followingSet to list
     allPosts = Posts.objects.filter(user__in=[2]).order_by('time_posted')
@@ -156,7 +155,14 @@ def profile(request, user):
     profileUserID = User.objects.get(username=user).id
     userPosts = Posts.objects.filter(user_id=profileUserID)
 
-    # TODO
+    # Paginate user posts, two per page
+    paginator = Paginator(userPosts, 2)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except EmptyPage:
+        page_obj = paginator.get_page(1)
+
     # Get following/follower count for current user
     following = UserFollowing.objects.filter(user_id=profileUserID)
     print(following)
@@ -166,16 +172,14 @@ def profile(request, user):
         # Check if user logged in is the same user as the profile
         # If they are the same, do not display a follow button
         currentUserID = User.objects.get(username=request.user).id
+
+        # Check if user is following the user's page they are visiting
         if User.objects.get(username=request.user).id == profileUserID:
             followButton = False
         else:
             followButton = True
-            # Check if user is following the user's page they are visiting
-            print("current user ID: ", currentUserID)
-            print("profile user ID: ", profileUserID)
-            
             try:
-                followCheck = UserFollowing.objects.get(    user_id=currentUserID, following_user_id=profileUserID)
+                followCheck = UserFollowing.objects.get(user_id=currentUserID, following_user_id=profileUserID)
                 if followCheck:
                     following = True
             except UserFollowing.DoesNotExist:
@@ -184,13 +188,14 @@ def profile(request, user):
         currentUserID = None
         followButton = False
 
-    user = User.objects.get(id=profileUserID) # it is just example with id 1
+    # Display follower/following count
+    user = User.objects.get(id=profileUserID) 
     followingCount = len(user.following.all())
     followerCount = len(user.followers.all())
 
     return render(request, "network/profile.html", {
         "user": user,
-        "userPosts": userPosts,
+        "page_obj": page_obj,
         "followButton": followButton,
         "currentUserID": currentUserID,
         "following": following,
