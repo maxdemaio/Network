@@ -117,25 +117,26 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+
 def following(request):
+    """ Show posts from users the current user is following """
     # Check if user is authenticated
     if request.user.is_authenticated == True:
         currentUserID = User.objects.get(username=request.user).id
     else:
         return HttpResponse("Error, must be signed in")
 
+    # Obtain list of people the user is following
+    user = User.objects.get(id=currentUserID)
+    followingSet = user.following.all()
+    follower_ids = []
+    for x in followingSet.values("following_user_id"):
+        follower_ids.append(x["following_user_id"])
+
     # Pagination of posts
     # Sort the posts from most recent to oldest
-    # TODO filter allposts
-    user = User.objects.get(id=currentUserID) 
-
-    # Error thrown because I'm usering user following object and not user object
-    followingSet = user.following.all()
-    print(followingSet[0])  # Userfollowing object
-
-    # TODO, change followingSet to list
-    allPosts = Posts.objects.filter(user__in=[2]).order_by('time_posted')
-    paginator = Paginator(allPosts, 2)  # Two per page
+    allPosts = Posts.objects.filter(user__in=follower_ids).order_by('time_posted')
+    paginator = Paginator(allPosts, 2) 
     page_number = request.GET.get('page', 1)
 
     try:
