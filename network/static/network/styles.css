@@ -1,6 +1,26 @@
+/* Overaching styles */
+/* Color palette: https://coolors.co/2081c3-231f20-5b8c5a-bb4430-dfe2cf */
 .body {
     margin: 10px;
 }
+
+#my-reference {
+    text-align: center;
+    margin: 10px;
+}
+
+.navbar-custom {
+    background-color: #DFE2CF;
+}
+
+nav a {
+    color: #5B8C5A;
+}
+
+nav a:hover {
+    color: #3d5d3c;
+}
+
 
 /* All Posts */
 #new-post-section {

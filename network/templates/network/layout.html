@@ -10,8 +10,11 @@
     {% block head %}{% endblock %}
     <body>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'network/organization.svg' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+                Network
+            </a>
           
             <div>
               <ul class="navbar-nav mr-auto">
@@ -46,5 +49,11 @@
             {% block body %}
             {% endblock %}
         </div>
+
+        <footer id="my-reference">
+            Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
+                title="Flaticon"> www.flaticon.com</a>
+        </footer>
+        
     </body>
 </html>
