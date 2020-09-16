@@ -129,7 +129,7 @@
 {% endblock %}
 
 {% block body %}
-<h1 id="profileUser">{{ user }}</h1>
+<h1 id="profileUser">{{ profUser }}</h1>
 
 {% if followButton %}
 <button id="follow-button" type="button" class="btn btn-info">
@@ -151,7 +151,7 @@
 </div>
 
 
-<h2>{{ user }}'s posts</h2>
+<h2>{{ profUser }}'s posts</h2>
 <div class="posts-section">
     {% for post in page_obj %}
     <div id="post-{{ post.id }}" class="post">
@@ -181,11 +181,11 @@
     <ul class="pagination">
         {% if page_obj.has_previous %}
         <li class="page-item"><a class="page-link"
-                href="{% url 'profile' user %}?page={{page_obj.previous_page_number}}">Previous</a></li>
+                href="{% url 'profile' profUser %}?page={{page_obj.previous_page_number}}">Previous</a></li>
         {% endif %}
 
         {% if page_obj.has_next %}
-        <li class="page-item"><a class="page-link" href="{% url 'profile' user %}?page={{page_obj.next_page_number}}">Next</a>
+        <li class="page-item"><a class="page-link" href="{% url 'profile' profUser %}?page={{page_obj.next_page_number}}">Next</a>
         </li>
         {% endif %}
     </ul>

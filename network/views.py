@@ -190,12 +190,12 @@ def profile(request, user):
         followButton = False
 
     # Display follower/following count
-    user = User.objects.get(id=profileUserID) 
-    followingCount = len(user.following.all())
-    followerCount = len(user.followers.all())
+    profUser = User.objects.get(id=profileUserID) 
+    followingCount = len(profUser.following.all())
+    followerCount = len(profUser.followers.all())
 
     return render(request, "network/profile.html", {
-        "user": user,
+        "profUser": profUser,
         "page_obj": page_obj,
         "followButton": followButton,
         "currentUserID": currentUserID,
