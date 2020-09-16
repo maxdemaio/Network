@@ -1,29 +1,50 @@
 /* Overaching styles */
-/* Color palette: https://coolors.co/2081c3-231f20-5b8c5a-bb4430-dfe2cf */
+/* Color palette: based on Django */
 .body {
-    margin: 10px;
-    color: #231F20;
+    padding: 10px;
+    color: #0c3c26;
 }
 
-#my-reference {
+footer {
+    background-color: #44b78b;
+    color: white;
     text-align: center;
-    margin: 10px;
+    padding: 10px;
 }
 
 .navbar-custom {
-    background-color: #DFE2CF;
+    background-color: #578b77;
 }
 
 nav a {
-    color: #5B8C5A;
+    color: white;
 }
 
 nav a:hover {
-    color: #3d5d3c;
+    color: #c9f0dd;
 }
 
+a {
+    color: #20aa76;
+}
 
-/* All Posts */
+a:hover {
+    color: #25c488;
+}
+
+.my-link {
+    color: #20aa76 !important;
+}
+
+.my-link:hover {
+    color: #25c488 !important;
+}
+
+/* Posts */
+.post {
+    margin-top: 10px;
+}
+
 #new-post-section {
     border-radius: 5px;
     padding: 20px;
@@ -31,7 +52,6 @@ nav a:hover {
     margin-bottom: 10px;
 }
 
-/* Probably can reuse for following section */
 .posts-section .post {
     border-radius: 5px;
     border: 1px solid grey;
@@ -41,14 +61,17 @@ nav a:hover {
 .poster-name {
     font-size: 1.5rem;
 }
-.post {
+
+.my-pagenav {
     margin-top: 10px;
 }
 
-.my-link {
-    color: lightblue !important;
+.my-pagenav li a {
+    background-color: white;
+    color: #0c3c26;
 }
 
-#my-pagenav {
-    margin-top: 10px;
+.my-pagenav li a:hover {
+    background-color:#0c3c26;
+    color: white;
 }
