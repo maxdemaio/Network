@@ -36,15 +36,13 @@
             data: { csrfmiddlewaretoken: csrftoken, followee: followee, follow: follow},
             success: function (json) {
                 console.log("Success");
-
-                // TODO
+                count = parseInt(document.querySelector("#followers-number").innerHTML);
+                
                 // Update Follow Count
                 if (json.follow_count) {
-                    count = document.querySelector("#followers-number").innerHTML;
-                    
+                    document.querySelector("#followers-number").innerHTML = count + 1;
                 } else {
-                    count = document.querySelector("#following-number").innerHTML;
-                    
+                    document.querySelector("#followers-number").innerHTML = count - 1;
                 }
                 }
             });
