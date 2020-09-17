@@ -36,6 +36,16 @@
             data: { csrfmiddlewaretoken: csrftoken, followee: followee, follow: follow},
             success: function (json) {
                 console.log("Success");
+
+                // TODO
+                // Update Follow Count
+                if (json.follow_count) {
+                    count = document.querySelector("#followers-number").innerHTML;
+                    
+                } else {
+                    count = document.querySelector("#following-number").innerHTML;
+                    
+                }
                 }
             });
         };

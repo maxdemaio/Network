@@ -244,17 +244,19 @@ def toggleFollow(request):
             # If follow already true, change to unfollow and vise versa
             if follow == "false":
                 # Unfollow
+                follow_count = False
                 instance = UserFollowing.objects.get(
                     user_id=follower_id, following_user_id=followee_id)
                 instance.delete()
             else:
                 # Follow
+                follow_count = True
                 UserFollowing.objects.create(
                     user_id=follower_id, following_user_id=followee_id)
                 
                 
             # Pass back success
-            return HttpResponse(json.dumps({'response': 'success'}), content_type='application/json')
+            return HttpResponse(json.dumps({'response': 'success', "follow_count": follow_count}), content_type='application/json')
         else:
             return HttpResponse("You must be signed in to follow another user")
 
