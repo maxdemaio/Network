@@ -38,6 +38,9 @@ def index(request):
                 print(content)
                 print(currentUser.id)
                 return HttpResponseRedirect(reverse("index"))
+        else:
+            # TODO return better form not valid response
+            return HttpResponse("Error, form not valid")
     else:
         # Create new post form instance
         newPostForm = PostForm()
