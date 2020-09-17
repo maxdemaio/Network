@@ -35,8 +35,6 @@ def index(request):
                 newPost = Posts(user_id=currentUser.id,content=content)
                 newPost.save()
 
-                print(content)
-                print(currentUser.id)
                 return HttpResponseRedirect(reverse("index"))
         else:
             # TODO return better form not valid response
@@ -169,7 +167,6 @@ def profile(request, user):
 
     # Get following/follower count for current user
     following = UserFollowing.objects.filter(user_id=profileUserID)
-    print(following)
 
     # Toggle edit buttons based on if user ids match the post's poster
     if request.user.is_authenticated == True:
@@ -214,8 +211,6 @@ def editPost(request):
     if request.method == "POST":
         post_id = int(request.POST.get('postID', ''))
         newContents = request.POST.get("content", "")
-        print(post_id)
-        print(newContents)
         
         # Update post w/ given post ID with new contents
         p = Posts.objects.get(id=post_id)
@@ -237,8 +232,6 @@ def toggleFollow(request):
         if request.user.is_authenticated == True:
             follower = User.objects.get(username=request.user)
             follower_id = follower.id
-            print(follow)
-            print(follower_id)
 
             # Toggle follow/unfollow
             # If follow already true, change to unfollow and vise versa
