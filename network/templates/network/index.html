@@ -132,7 +132,11 @@
         </div>
 
         <div>
-            ❤️ <span class="text-muted">{{ post.like_count }}</span>
+            <button class="like-button" value="{{ post.id }}">
+                ❤️
+            </button>
+            
+            <span id="{{post.id}}_like_count" class="text-muted">{{ post.like_count }}</span>
         </div>
     </div>
     {% endfor %}

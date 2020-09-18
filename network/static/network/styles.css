@@ -46,6 +46,10 @@ a:hover {
     margin-top: 10px;
 }
 
+.post:hover {
+    background-color: #f1fbf6;
+}
+
 #new-post-section {
     border-radius: 5px;
     padding: 20px;
@@ -75,4 +79,8 @@ a:hover {
 .my-pagenav li a:hover {
     background-color:#0c3c26;
     color: white;
+}
+
+.like-button {
+    border-radius: 5px;
 }

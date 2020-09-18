@@ -44,9 +44,9 @@ def index(request):
         newPostForm = PostForm()
 
         # Pagination of posts
-        # Sort the posts from most recent to oldest, two per page
+        # Sort the posts from most recent to oldest, ten per page
         allPosts = Posts.objects.order_by('time_posted')
-        paginator = Paginator(allPosts, 2)
+        paginator = Paginator(allPosts, 10)
         page_number = request.GET.get('page', 1)
 
         try:
@@ -157,8 +157,8 @@ def profile(request, user):
     profileUserID = User.objects.get(username=user).id
     userPosts = Posts.objects.filter(user_id=profileUserID)
 
-    # Paginate user posts, two per page
-    paginator = Paginator(userPosts, 2)
+    # Paginate user posts, ten per page
+    paginator = Paginator(userPosts, 10)
     page_number = request.GET.get('page', 1)
     try:
         page_obj = paginator.get_page(page_number)
