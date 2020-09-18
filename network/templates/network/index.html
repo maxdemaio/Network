@@ -19,7 +19,12 @@
             }
             return cookieValue;
         };
+    
+    // Upon submission, the following function will post to the Django backend
+    // The JS will fetch the response and update the post's like count / likes.
+    function ajaxLike(post_id) {
 
+    }
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
@@ -87,6 +92,10 @@
         // Append text area and button to post
         contentElement.appendChild(textArea);
         contentElement.appendChild(buttonDiv);
+
+        
+        // TODO: Apply ajaxFunction to like buttons
+        // Apply onlcick to AJAX like function
     };
     
 </script>
