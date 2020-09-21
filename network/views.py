@@ -254,3 +254,9 @@ def toggleFollow(request):
             return HttpResponse("You must be signed in to follow another user")
 
         
+def toggleLike(request):
+    """ Update like / like count """
+    if request.method == "POST":
+        print("Success AJAX")
+    else:
+        return HttpResponse("You must be signed in to like a post")
