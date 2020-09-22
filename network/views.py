@@ -258,5 +258,6 @@ def toggleLike(request):
     """ Update like / like count """
     if request.method == "POST":
         print("Success AJAX")
+        return HttpResponse(json.dumps({'response': 'success'}))
     else:
         return HttpResponse("You must be signed in to like a post")

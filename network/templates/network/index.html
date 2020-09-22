@@ -22,25 +22,24 @@
     
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's like count / likes.
-    function ajaxLike(post_id) {
-        console.log("Called");
+    $(document).on("click", "#like-button", function(e) {
+        console.log("Clicked");
+        e.preventDefault();
         const csrftoken = getCookie('csrftoken');
-
-        // Send new contents to be updated on back-end
         $.ajax({
             type: "POST",
             url: "{% url 'like' %}",
-            data: { csrfmiddlewaretoken: csrftoken, postID: post_id},
-            async: true,
-            processData: false,
-            contentType: false,
-            success: function (json) {
-                // TODO
-                // Update like count based on if like/unlike
+            data: {
+                postid: $("#like-button").val(),
+                csrfmiddlewaretoken: csrftoken,
+                action: "post"
+            },
+            success: function(json) {
                 console.log("Success");
+                console.log(json);
             }
         });
-    }
+    });
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
@@ -153,7 +152,7 @@
         </div>
 
         <div>
-            <button class="like-button" onclick="ajaxLike(this)" value="{{ post.id }}">
+            <button id="like-button" value="{{ post.id }}">
                 ❤️
             </button>
             
