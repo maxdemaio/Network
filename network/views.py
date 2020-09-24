@@ -257,7 +257,12 @@ def toggleFollow(request):
 def toggleLike(request):
     """ Update like / like count """
     if request.method == "POST":
-        print("Success AJAX")
-        return HttpResponse(json.dumps({'response': 'success'}))
-    else:
-        return HttpResponse("You must be signed in to like a post")
+        # Check and make sure user is valid again
+        if request.user.is_authenticated == True:
+            print("Success AJAX") 
+            id = int(request.POST.get('postid'))
+            print(id)
+
+            return HttpResponse(json.dumps({'response': 'success'}))
+        else:
+            return HttpResponse("You must be signed in to like a post")

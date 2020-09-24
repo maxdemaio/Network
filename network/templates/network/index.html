@@ -3,6 +3,34 @@
 {% block head %}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded and parsed');
+
+            // Add event listeners for like buttons
+            var likeButtons = document.querySelectorAll(".like-button");
+            for (var i = 0; i < likeButtons.length; i++) {
+                likeButtons[i].addEventListener("click", function () {
+                    const csrftoken = getCookie('csrftoken');
+
+                    // Upon submission, the following function will post to the Django backend
+                    // The JS will fetch the response and update the post's like count / likes.
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'like' %}",
+                        data: {
+                            postid: this.id,
+                            csrfmiddlewaretoken: csrftoken,
+                            action: "post"
+                        },
+                        success: function (json) {
+                            console.log("Success");
+                            console.log(json);
+                        }
+                    });
+                });
+            }
+    });
+
     // Obtain CSRF Token
     function getCookie(name) {
             let cookieValue = null;
@@ -19,27 +47,6 @@
             }
             return cookieValue;
         };
-    
-    // Upon submission, the following function will post to the Django backend
-    // The JS will fetch the response and update the post's like count / likes.
-    $(document).on("click", "#like-button", function(e) {
-        console.log("Clicked");
-        e.preventDefault();
-        const csrftoken = getCookie('csrftoken');
-        $.ajax({
-            type: "POST",
-            url: "{% url 'like' %}",
-            data: {
-                postid: $("#like-button").val(),
-                csrfmiddlewaretoken: csrftoken,
-                action: "post"
-            },
-            success: function(json) {
-                console.log("Success");
-                console.log(json);
-            }
-        });
-    });
 
     // Upon submission, the following function will post to the Django backend
     // The JS will fetch the response and update the post's contents.
@@ -152,7 +159,7 @@
         </div>
 
         <div>
-            <button id="like-button" value="{{ post.id }}">
+            <button id="{{ post.id }}" class="like-button" value="{{ post.id }}" type="button">
                 ❤️
             </button>
             
