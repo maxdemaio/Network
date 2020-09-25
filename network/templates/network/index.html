@@ -69,7 +69,7 @@
             success: function (json) {
                 // Update post contents w/ updated contents (don't have to deal w/ backend)
                 contentElement.innerHTML = newContents;
-                console.log("Success");
+                console.log("AJAX Success");
             }
         });
     };
@@ -84,7 +84,6 @@
         // Check if textarea already exists in element, don't create another one
         contentChildList = contentElement.children;
         for (let item of contentChildList) {
-            console.log(item.tagName);
             if (item.tagName === "TEXTAREA") {
                 return;
             }

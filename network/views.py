@@ -259,7 +259,6 @@ def toggleLike(request):
     if request.method == "POST":
         # Check and make sure user is valid again
         if request.user.is_authenticated == True:
-            print("Success AJAX") 
             id = int(request.POST.get('postid'))
             post = Posts.objects.get(pk=id)
 
