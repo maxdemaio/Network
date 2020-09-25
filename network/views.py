@@ -261,8 +261,28 @@ def toggleLike(request):
         if request.user.is_authenticated == True:
             print("Success AJAX") 
             id = int(request.POST.get('postid'))
-            print(id)
+            post = Posts(id=id)
 
-            return HttpResponse(json.dumps({'response': 'success'}))
+            # Check if user liked post status
+            if post.likes.filter(id=request.user.id).exists():
+                # Remove user from likes field and lower like count
+                post.likes.remove(int(request.user.id))
+                # Like count returns as string, so convert to int and back again
+                currentCount = post.like_count
+                newCount = int(currentCount) - 1
+                post.like_count = newCount
+                result = post.like_count
+                post.save()
+            else:
+                post.likes.add(int(request.user.id))
+                print(type(post.like_count))
+                # Like count returns as string, so convert to int and back again
+                currentCount = post.like_count
+                newCount = int(currentCount) + 1
+                post.like_count = str(newCount)
+                result = post.like_count
+                post.save()
+
+            return HttpResponse(json.dumps({'result': result}))
         else:
             return HttpResponse("You must be signed in to like a post")

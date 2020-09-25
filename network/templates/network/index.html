@@ -4,8 +4,6 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM fully loaded and parsed');
-
             // Add event listeners for like buttons
             var likeButtons = document.querySelectorAll(".like-button");
             for (var i = 0; i < likeButtons.length; i++) {
@@ -18,13 +16,14 @@
                         type: "POST",
                         url: "{% url 'like' %}",
                         data: {
-                            postid: this.id,
+                            postid: this.id.split("-")[1],
                             csrfmiddlewaretoken: csrftoken,
                             action: "post"
                         },
                         success: function (json) {
                             console.log("Success");
                             console.log(json);
+                            document.querySelector("#" + this.id).innerHTML = json["result"]
                         }
                     });
                 });
@@ -159,7 +158,7 @@
         </div>
 
         <div>
-            <button id="{{ post.id }}" class="like-button" value="{{ post.id }}" type="button">
+            <button id="like-{{ post.id }}" class="like-button" value="{{ post.id }}" type="button">
                 ❤️
             </button>
             
