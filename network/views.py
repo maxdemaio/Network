@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage
 from django.db import IntegrityError
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -262,24 +263,17 @@ def toggleLike(request):
             print("Success AJAX") 
             id = int(request.POST.get('postid'))
             post = Posts(id=id)
+            print(post)
 
             # Check if user liked post status
             if post.likes.filter(id=request.user.id).exists():
-                # Remove user from likes field and lower like count
                 post.likes.remove(int(request.user.id))
-                # Like count returns as string, so convert to int and back again
-                currentCount = post.like_count
-                newCount = int(currentCount) - 1
-                post.like_count = newCount
+                post.like_count = F('like_count') - 1
                 result = post.like_count
                 post.save()
             else:
                 post.likes.add(int(request.user.id))
-                print(type(post.like_count))
-                # Like count returns as string, so convert to int and back again
-                currentCount = post.like_count
-                newCount = int(currentCount) + 1
-                post.like_count = str(newCount)
+                post.like_count = F('like_count') + 1
                 result = post.like_count
                 post.save()
 

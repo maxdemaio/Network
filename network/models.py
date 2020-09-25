@@ -16,4 +16,4 @@ class Posts(models.Model):
     time_posted = models.DateTimeField(default=timezone.now)
     content = models.CharField(max_length=300)
     likes = models.ManyToManyField(User, related_name="like", default=None, blank=True)
-    like_count = models.BigIntegerField(default="0")
+    like_count = models.BigIntegerField(default=0)
