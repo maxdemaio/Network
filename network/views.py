@@ -38,7 +38,6 @@ def index(request):
 
                 return HttpResponseRedirect(reverse("index"))
         else:
-            # TODO return better form not valid response
             return HttpResponse("Error, form not valid")
     else:
         # Create new post form instance
@@ -263,20 +262,19 @@ def toggleLike(request):
             print("Success AJAX") 
             id = int(request.POST.get('postid'))
             post = Posts.objects.get(pk=id)
-            print(post)
 
             # Check if user liked post status
             if post.likes.filter(id=request.user.id).exists():
                 post.likes.remove(int(request.user.id))
                 post.like_count = F('like_count') - 1
-                result = post.like_count
                 post.save()
             else:
                 post.likes.add(int(request.user.id))
                 post.like_count = F('like_count') + 1
-                result = post.like_count
                 post.save()
-
-            return HttpResponse(json.dumps({'result': result}))
+            
+            post.refresh_from_db()
+            result = post.like_count
+            return HttpResponse(json.dumps({"result": result, "postid": id}))
         else:
             return HttpResponse("You must be signed in to like a post")
