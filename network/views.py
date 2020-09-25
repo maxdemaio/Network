@@ -262,7 +262,7 @@ def toggleLike(request):
         if request.user.is_authenticated == True:
             print("Success AJAX") 
             id = int(request.POST.get('postid'))
-            post = Posts(id=id)
+            post = Posts.objects.get(pk=id)
             print(post)
 
             # Check if user liked post status
