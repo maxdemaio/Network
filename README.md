@@ -1,6 +1,8 @@
 # Network
 A Twitter-like social network website for making posts and following users.
 
+![](/repoImages/Network.gif)
+
 Within this repository is a Django project called `project4` that contains a single app called `network`. This was one of the final projects of Harvard's [CS50W](https://courses.edx.org/courses/course-v1:HarvardX+CS50W+Web/course/) course.
 
 ### How to run locally
