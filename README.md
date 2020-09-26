@@ -8,7 +8,25 @@ After cloning the repository onto your machine, navigate to the project's direct
 
 1. Install requirements
     - `pip install -r requirements.txt`
-2. Migrate and run server
+2. Create a database
+    - `python`
+    ```python
+     import sqlite3
+     conn = None
+     conn = sqlite3.connect("myDB.db")
+     conn.close()
+     quit()
+    ```
+    - Change the name of the used DB in `settings.py`
+    ```py
+    DATABASES = {
+    'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'myDB.db')}
+    }
+    ```
+
+3. Migrate and run server
     - `python manage.py makemigrations`
     - `python manage.py migrate`
     - `python manager.py runserver`
