@@ -6,8 +6,9 @@ Within this repository is a Django project called `project4` that contains a sin
 ### How to run locally
 After cloning the repository onto your machine, navigate to the project's directory.
 
-1. Install requirements
+1. Install requirements (keep in mind this was made with `python 3.8.3`)
     - `pip install -r requirements.txt`
+
 2. Create a database
     - `python`
     ```python
@@ -17,7 +18,8 @@ After cloning the repository onto your machine, navigate to the project's direct
      conn.close()
      quit()
     ```
-    - Change the name of the used DB in `settings.py`
+
+    - Change the name of the used DB in `settings.py` within the `project4` directory.
     ```py
     DATABASES = {
     'default': {
@@ -27,7 +29,6 @@ After cloning the repository onto your machine, navigate to the project's direct
     ```
 
 3. Migrate and run server
-    - `python manage.py makemigrations`
     - `python manage.py migrate`
     - `python manager.py runserver`
 
