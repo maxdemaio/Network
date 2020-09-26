@@ -23,6 +23,32 @@
                 // Pass if we are following or unfollowing a user
                 ajaxFollow(followee, follow);
             };
+
+            // Add event listeners for like buttons
+            var likeButtons = document.querySelectorAll(".like-button");
+            for (var i = 0; i < likeButtons.length; i++) {
+                likeButtons[i].addEventListener("click", function () {
+                    const csrftoken = getCookie('csrftoken');
+
+                    // Upon submission, the following function will post to the Django backend
+                    // The JS will fetch the response and update the post's like count / likes.
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'like' %}",
+                        data: {
+                            postid: this.id.split("-")[1],
+                            csrfmiddlewaretoken: csrftoken,
+                            action: "post"
+                        },
+                        success: function (json) {
+                            var json = JSON.parse(json);
+                            console.log("AJAX Success");
+                            // Update like count (increment/decrement)
+                            document.querySelector("#" + "like_count_" + json.postid).innerHTML = json.result;
+                        }
+                    });
+                });
+            }
         });
     
     function ajaxFollow(followee, follow) {
@@ -178,7 +204,11 @@
         </div>
 
         <div>
-            ❤️ <span class="text-muted">{{ post.like_count }}</span>
+            <button id="like-{{ post.id }}" class="like-button" value="{{ post.id }}" type="button">
+                ❤️
+            </button>
+        
+            <span id="like_count_{{post.id}}" class="text-muted">{{ post.like_count }}</span>
         </div>
     </div>
     {% endfor %}

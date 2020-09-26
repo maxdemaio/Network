@@ -1,6 +1,53 @@
 {% extends "network/layout.html" %}
 
 {% block head %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listeners for like buttons
+        var likeButtons = document.querySelectorAll(".like-button");
+        for (var i = 0; i < likeButtons.length; i++) {
+            likeButtons[i].addEventListener("click", function () {
+                const csrftoken = getCookie('csrftoken');
+
+                // Upon submission, the following function will post to the Django backend
+                // The JS will fetch the response and update the post's like count / likes.
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'like' %}",
+                    data: {
+                        postid: this.id.split("-")[1],
+                        csrfmiddlewaretoken: csrftoken,
+                        action: "post"
+                    },
+                    success: function (json) {
+                        var json = JSON.parse(json);
+                        console.log("AJAX Success");
+                        // Update like count (increment/decrement)
+                        document.querySelector("#" + "like_count_" + json.postid).innerHTML = json.result;
+                    }
+                });
+            });
+        }
+    });
+
+    // Obtain CSRF Token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+</script>
 {% endblock %}
 
 
@@ -27,7 +74,11 @@
         </div>
 
         <div>
-            ❤️ <span class="text-muted">{{ post.like_count }}</span>
+            <button id="like-{{ post.id }}" class="like-button" value="{{ post.id }}" type="button">
+                ❤️
+            </button>
+        
+            <span id="like_count_{{post.id}}" class="text-muted">{{ post.like_count }}</span>
         </div>
     </div>
     {% endfor %}
